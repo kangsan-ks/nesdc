@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="1300px, initial-scale=1">
-    <title>중앙선거관리위원회</title>
-    <link rel="stylesheet" href="css/index.css">
-    <script src="js/index.js"></script>
-</head>
-<body>
-    <div id="container">
-        <div id="header">
-            <div class="inner">
-                <a href="/"><img src="img/logo.png" alt="" style="width: auto;"></a>
-            </div>
-        </div>
-        <div id="section">
+<?php
+    include_once 'header.php';
+?>
             <div class="inner">
                 <div class="notice_outer">
                     <div class="notice_box">
@@ -61,6 +47,7 @@
                             <col width="90">
                             <col width="100">
                         </colgroup>
+                        
                         <tr>
                             <th>조사기관명</th>
                             <th>조사의뢰자</th>
@@ -68,20 +55,28 @@
                             <th>등록일</th>
                             <th>지역</th>
                         </tr>
+                        <?php
+                            $sql = "select * from board order by idx desc";
+                            $result = mysqli_query($link, $sql) or error(mysqli_error());
+                            while($row = mysqli_fetch_array($result)) {
+                        ?>
                         <tr>
-                            <td>(주)엠브레인퍼블릭</td>
-                            <td class="wd315">(주)엠브레인퍼블릭,케이스탯123213312123312리서치 </td>
-                            <td class="wd495"><a href="#none">전국 정기(정례)조사 대통령 선거 정당지지도 정치, 사회현안 등ㅁㄴㄹㅇㄴㅁㅇㄹㄻㄴㅇㄻㄴㅇㅇㄴㅁㄹ</a></td>
-                            <td>2020-09-06</td>
-                            <td>전국</td>
+                            <td><?=$row['category']?></td>
+                            <td class="wd315"><?=$row['manager_name']?></td>
+                            <td class="wd495"><a href="view.php?idx=<?=$row['idx']?>"><?=$row['contents']?></a></td>
+                            <td><?=substr($row['reg_date'],0,10)?></td>
+                            <td><?=$row['address']?></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>(주)엠브레인퍼블릭</td>
                             <td class="wd315">(주)엠브레인퍼블릭,케이스탯리서치 </td>
                             <td class="wd495"><a href="#none">전국 정기(정례)조사 대통령 선거 정당지지도 정치, 사회현안 등</a></td>
                             <td>2020-09-06</td>
                             <td>전국</td>
-                        </tr>
+                        </tr> -->
+                        <?php
+                            }
+                        ?>
                     </table>
                 </div>
                 <div class="bottom_layout">
@@ -100,12 +95,19 @@
                     </div>
 
                     <div class="login_write_outer">
+                        <?php
+                            if(isset($_SESSION['user_id'])){
+                        ?>
                         <div class="session_box">
-                            <p><b>session_ID</b>님 접속중입니다.</p>
-                            <a href="#none">로그아웃하기</a>
+                            <p><b><?=$_SESSION['user_id']?></b>님 접속중입니다.</p>
+                            <a href="logout.php">로그아웃하기</a>
                         </div>
-                        <div class="login_write_box write_page"><a href="#none">여론조사결과 등록</a></div>
-                        <div class="login_write_box"><a href="login.html">여론조사기관 로그인</a></div>
+                        <div class="login_write_box write_page"><a href="write.php">여론조사결과 등록</a></div>
+                        <?php
+                            } else{
+                        ?>
+                        <div class="login_write_box"><a href="login.php">여론조사기관 로그인</a></div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
